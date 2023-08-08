@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Web en Python</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+</head>
+<body>
+    <h1>Chat Web en Python</h1>
+    <div id="messages"></div>
+    <input id="userInput" type="text" placeholder="Entrez votre message...">
+    <button id="sendButton">Envoyer</button>
+
+    <script>
+        const socket = io.connect('http://localhost:5000');
+
+        socket.on('connect', () => {
+            document.getElementById('sendButton').onclick = () => {
+                const message = document.getElementById('userInput').value;
+                socket.emit('message', message);
+                document.getElementById('userInput').value = '';
+            };
+        });
+
+        socket.on('message', (message) => {
+            const p = document.createElement('p');
+            p.innerText = message;
+            document.getElementById('messages').appendChild(p);
+        });
+    </script>
+</body>
+</html>
